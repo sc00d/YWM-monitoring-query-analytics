@@ -7,17 +7,17 @@ import time
 import os
 
 # Параметры
-TOKEN = 'ваш токен, строка вида y0__xC...'
-HOST_ID = {'https:sub1.domain.ru:443': [225], 'https:sub2.domain.ru:443': [1]}  # Формат для API
-EXCLUDED_HOSTS = ["https://sub3.domain.ru", "https://domain777.ru"]  # Исключенные хосты
+TOKEN = 'ваш токен, строка вида y0__xC...' # Инструкция как получить - https://yandex.ru/dev/webmaster/doc/dg/tasks/how-to-get-oauth.html
+HOST_ID = {'https:sub1.domain.ru:443': [225], 'https:sub2.domain.ru:443': [1]}  # Массив host_id в формате ЯВМ + массив регионов (https://yandex.ru/dev/webmaster/doc/ru/reference/host-query-analytics#region-ids). Оставьте пустым, если нужно собрать по всем хостам.
+EXCLUDED_HOSTS = ["https://sub3.domain.ru", "https://domain777.ru"]  # Исключенные хосты, если надо собрать данные по всем, кроме этих
 SLEEP_TIME_API = 2
-CONFIG_FILE = 'processed_data.json'
+CONFIG_FILE = 'processed_data.json' # Название служебного файла, используется, чтобы можно было продолжить сбор с того места, где остановились
 TEMP_CSV_FILE = f'temp_data_{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.csv'
-ALL_TIME_FULL_FILE_CSV = 'for-all-time-full-data-query_stats.csv'
-ALL_TIME_FULL_FILE_DB = 'for-all-time-full-data-query_stats.db'
-STORAGE_TYPE = 'csv'  # 'csv' или 'sqlite'
+ALL_TIME_FULL_FILE_CSV = 'for-all-time-full-data-query_stats.csv' # Название выходного файла, если выбран CSV
+ALL_TIME_FULL_FILE_DB = 'for-all-time-full-data-query_stats.db' # Название выходного файла, если выбран sqlite
+STORAGE_TYPE = 'csv'  # выберите 'csv' или 'sqlite'
 COLLECT_ZERO_DEMAND = 1  # 1 - не собирать фразы с нулевым спросом, 0 - собирать все
-COLLECT_BY_URL = 0  # 0 - собирать по хосту, 1 - собирать по URL
+COLLECT_BY_URL = 0  # 0 - собирать по хосту целиком (быстрее), 1 - собирать по URL (медленнее, но будут данные по страницам)
 REGION_IDS = []  # Глобальный массив регионов, по умолчанию пустой
 
 # Инициализация SQLite (если выбрано)
