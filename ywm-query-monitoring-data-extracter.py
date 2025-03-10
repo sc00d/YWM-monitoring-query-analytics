@@ -149,7 +149,11 @@ def load_all_time_full_data():
     if STORAGE_TYPE == 'csv':
         if os.path.exists(ALL_TIME_FULL_FILE_CSV):
             try:
-                df = pd.read_csv(ALL_TIME_FULL_FILE_CSV)
+                # Указываем dtype для region_ids как str
+                df = pd.read_csv(ALL_TIME_FULL_FILE_CSV, dtype={'region_ids': str})
+                # Если столбец region_ids отсутствует в старом файле, добавляем его с 'N/A'
+                if 'region_ids' not in df.columns:
+                    df['region_ids'] = 'N/A'
                 return df[columns] if not df.empty else pd.DataFrame(columns=columns)
             except Exception as e:
                 print(f"Ошибка при чтении {ALL_TIME_FULL_FILE_CSV}: {e}. Используем пустой DataFrame.")
@@ -159,6 +163,9 @@ def load_all_time_full_data():
         conn = sqlite3.connect(ALL_TIME_FULL_FILE_DB)
         try:
             df = pd.read_sql_query("SELECT * FROM query_stats", conn)
+            # Если столбец region_ids отсутствует в базе, добавляем его с 'N/A'
+            if 'region_ids' not in df.columns:
+                df['region_ids'] = 'N/A'
             return df[columns] if not df.empty else pd.DataFrame(columns=columns)
         except Exception as e:
             print(f"Ошибка при чтении {ALL_TIME_FULL_FILE_DB}: {e}. Используем пустой DataFrame.")
