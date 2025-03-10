@@ -184,6 +184,12 @@ def update_all_time_full_data(new_data):
     
     if STORAGE_TYPE == 'csv':
         df_all_time = load_all_time_full_data()
+        # Фильтруем пустые или полностью NA столбцы перед объединением
+        df_all_time = df_all_time.dropna(how='all', axis=1)  # Удаляем столбцы, где все значения NA
+        df_new = df_new.dropna(how='all', axis=1)  # Удаляем столбцы, где все значения NA
+        if df_all_time.empty and df_new.empty:
+            print(f"Нет данных для объединения в {ALL_TIME_FULL_FILE_CSV}")
+            return
         df_combined = pd.concat([df_all_time, df_new]).drop_duplicates(subset=['date', 'host_id' if not COLLECT_BY_URL else 'url', 'query'])
         df_combined.to_csv(ALL_TIME_FULL_FILE_CSV, index=False, encoding='utf-8-sig')
         print(f"Данные добавлены в {ALL_TIME_FULL_FILE_CSV}")
